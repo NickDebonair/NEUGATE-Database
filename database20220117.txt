@@ -1,0 +1,65 @@
+--SQLによる照会
+SELECT employee_id, name FROM employee ORDER BY employee_id DESC;
+SELECT * FROM employee WHERE dept_id = 4 ORDER BY employee_id DESC;
+SELECT * FROM employee WHERE dept_id = 4 AND salary >= 400000;
+SELECT * FROM employee WHERE hire_date < '2000-1-1' OR hire_date > '2010-12-31';
+SELECT * FROM employee WHERE name LIKE '%山%';
+SELECT * FROM employee WHERE name LIKE '___ %';
+SELECT * FROM employee WHERE dept_id IN  (2, 3);
+SELECT * FROM employee ORDER BY salary DESC LIMIT 3;
+SELECT * FROM employee ORDER BY salary DESC LIMIT 3 OFFSET 3;
+
+--列関数とグループ
+SELECT SUM(price) FROM t_sales;
+SELECT item, SUM(price) FROM t_sales GROUP BY item;
+SELECT item, SUM(price) FROM t_sales;
+SELECT staff_name, COUNT(*) from t_sales GROUP BY staff_name;
+SELECT staff_name, COUNT(category) FROM t_sales GROUP BY staff_name;
+SELECT staff_name, COUNT(*), SUM(price) FROM t_sales
+GROUP BY staff_name;
+SELECT category , COUNT(*), SUM(price) FROM t_sales
+GROUP BY category HAVING SUM(price) >= 3000;
+SELECT staff_name, item, SUM(price) FROM t_sales WHERE staff_name = '斉藤 和夫' GROUP BY item;
+SELECT staff_name, item, SUM(price) FROM t_sales GROUP BY staff_name, item HAVING staff_name = '斉藤 和夫';
+SELECT staff_name, item, SUM(price) FROM t_sales WHERE staff_name='斉藤 和夫' GROUP BY staff_name, item;
+SELECT staff_name, item, SUM(price) FROM t_sales GROUP BY staff_name, item HAVING item = 'おにぎりセット' ORDER BY SUM(price) DESC;
+SELECT staff_name, item, SUM(price) FROM t_sales WHERE item = 'おにぎりセット' GROUP BY staff_name ORDER BY SUM(price) DESC;
+
+--表の結合
+SELECT
+E.employee_id 社員番号,
+E.name 氏名,
+D.name 部署名
+FROM
+employee E INNER JOIN dept D
+ON
+E.dept_id = D.dept_id
+;
+
+--トランザクション
+BEGIN TRANSACTION;
+DELETE FROM employee WHERE employee_id = 1;
+ROLLBACK;
+
+BEGIN TRANSACTION;
+DELETE FROM employee WHERE employee_id = 2;
+COMMIT;
+ROLLBACK;
+
+--テーブルの作成と制約
+CREATE TABLE category (
+category_id INTEGER PRIMARY KEY,
+name TEXT NOT NULL
+);
+CREATE TABLE product(
+product_id INTEGER PRIMARY KEY,
+name TEXT NOT NULL,
+category_id INTEGER NOT NULL REFERENCES category(category_id)
+);
+INSERT INTO category VALUES(1,'BOOK');
+INSERT INTO category VALUES(2,'DVD');
+INSERT INTO category VALUES(3,'GAME');
+INSERT INTO product VALUES(1,'吾輩は猫である',1);
+INSERT INTO product VALUES(2,'風と共に去りぬ'2);
+INSERT INTO product VALUES(3,'五目並べ',3);
+

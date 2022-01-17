@@ -1,0 +1,71 @@
+--演習14
+SELECT I.name 商品名, S.sales_date 取引日
+FROM item I INNER JOIN sales S ON I.item_id = S.item_id
+WHERE S.sales_id = '2021-12-10' OR S.sales_date ='2021-12-11';
+
+
+--Answer
+SELECT
+It.name 商品名, Sa.sales_date 取引日
+
+FROM
+item It INNER JOIN sales Sa
+ON It.item_id = Sa.item_id
+
+WHERE Sa.sales_date
+BETWEEN '2021-12-10' AND '2021-12-11'
+;
+
+--演習15
+SELECT S.sales_date 取引日, I.name 商品名, E.name 社員名
+FROM sales S INNER JOIN item I ON S.item_id = I.item_id
+INNER JOIN employee E ON S.employee_id = E.employee_id
+WHERE S.sales_date = '2021-12-10' OR S.sales_date = '2021-12-11'
+ORDER BY sales_date ASC;
+
+--Answer
+SELECT S.sales_date 取引日,I.name 商品名,E.name 社員名
+FROM sales S
+INNER JOIN item I
+ON I.item_id = S.item_id
+INNER JOIN employee E
+ON S.employee_id = E.employee_id
+WHERE S.sales_date
+BETWEEN '2021-12-10' AND '2021-12-11'
+ORDER BY S.sales_date ;
+
+--演習16
+SELECT E.name 社員名, I.name 商品名, COUNT(*) 販売数, SUM(I.price) 売上額
+FROM sales S INNER JOIN item I ON S.item_id = I.item_id
+INNER JOIN employee E ON S.employee_id = E.employee_id
+GROUP BY S.item_id, S.employee_id
+ORDER BY S.employee_id;
+
+--Answer
+SELECT E.name 社員名, I.name 商品名,COUNT(*) 販売数,SUM(I.price) 売上額
+FROM sales S
+INNER JOIN item I
+ON I.item_id = S.item_id
+INNER JOIN employee E
+ON S.employee_id = E.employee_id
+GROUP BY E.employee_id,I.item_id
+ORDER BY E.employee_id,I.item_id ;
+
+
+--演習17
+SELECT E.name 社員名, COUNT(*) 販売数, SUM(I.price) 売上額
+FROM sales S
+INNER JOIN item I ON S.item_id = I.item_id
+INNER JOIN employee E ON S.employee_id = E.employee_id
+GROUP BY S.employee_id
+ORDER BY SUM(I.price) DESC;
+
+--Answer
+SELECT E.name 社員名, COUNT(*) 販売数, SUM(I.price) 売上額
+FROM sales S
+INNER JOIN item I
+ON I.item_id = S.item_id
+INNER JOIN employee E
+ON S.employee_id = E.employee_id
+GROUP BY E.employee_id
+ORDER BY 売上額 DESC;

@@ -1,0 +1,50 @@
+--全行、全列の照会
+SELECT * FROM employee;
+
+--name列とhire_date列の照会
+SELECT name, hire_date FROM employee;
+
+SELECT * FROM employee ORDER BY dept_id ASC;
+
+SELECT * FROM employee WHERE dept_id = 4;
+
+SELECT * FROM employee WHERE name = '長谷川 雅紀';
+
+SELECT * FROM employee WHERE dept_id <> 4;
+
+SELECT * FROM employee WHERE salary <= 300000;
+
+SELECT * FROM employee WHERE hire_date > '2000-01-91';
+
+SELECT * FROM employee WHERE
+dept_id = 5
+AND
+salary >= 300000;
+
+--部分一致検索（あいまい検索）
+SELECT * FROM employee WHERE name LIKE '%川%';
+--前方一致検索
+SELECT * FROM employee WHERE name LIKE '梅%';
+--後方一致検索
+SELECT * FROM employee WHERE name LIKE '%み';
+
+SELECT * FROM employee WHERE name LIKE '_川%';
+SELECT * FROM employee WHERE name LIKE '__川%';
+
+SELECT * FROM employee
+WHERE hire_date BETWEEN '2000-01-01' AND '2009-12-31';
+
+SELECT * FROM employee
+WHERE hire_date >= '2000-01-01' AND hire_date <= '2009-12-31';
+
+SELECT * FROM employee WHERE dept_id IS NULL;
+
+--列関数とグループ
+SELECT COUNT(*), MIN(salary), MAX(salary), AVG(salary), SUM(salary) FROM employee;
+SELECT COUNT(*), MIN(salary), MAX(salary), AVG(salary), SUM(salary) FROM employee WHERE dept_id = 5;
+
+SELECT dept_id, COUNT(*), MIN(salary), MAX(salary), AVG(salary), SUM(salary)
+FROM employee GROUP BY dept_id ORDER BY dept_id;
+
+SELECT dept_id, COUNT(*), MIN(salary), MAX(salary), AVG(salary), SUM(salary)
+FROM employee GROUP BY dept_id HAVING SUM(salary) >= 500000 ORDER BY dept_id;
